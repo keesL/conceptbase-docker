@@ -6,13 +6,11 @@ The client/server system has clients written in Java, but the server requires a 
 
 The basic workflow is as follows:
 
-1. Extract the installation files from the installer
+1. Build the Docker images
 
-2. Build a docker image
+2. Create container(s) for the server (and perhaps for the client as well)
 
-3. Create a docker container
-
-4. Run the container as often as you want
+3. Run the container as often as you want
 
 
 
@@ -20,28 +18,8 @@ The basic workflow is as follows:
 
 ### Prepare installation files
 
-This is maybe the trickiest part of the entire installation process, since it requires the availability of an XWindows installation. Since the Conceptbase installer is a GUI application, it needs to display somewhere. The server has no GUI components, so once we are done extracting the files, we don't need it anymore.
+1. Download the ConceptBase.cc [installer](http://conceptbase.sourceforge.net/CB-Download.html) (CBinstaller.jar) and copy it into the `cb` directory.
 
-1. On Mac OS X, install [XQuartz](https://www.xquartz.org). Windows has XMing, but I have not tested it.
-
-2. Run the XServer. From within an xterm, execute the command `xhost + 127.0.0.1`. This allows clients on localhost (i.e., your computer) to display GUIs on your display.
-
-3. Create a folder/directory in which you want to keep your ConceptBase files. I'll assume you call it `cb`.
-
-3. Download the ConceptBase.cc [installer](http://conceptbase.sourceforge.net/CB-Download.html) and copy it into the `cb` directory.
-
-4. Create a temporary docker container that maps your `cb` directory into `/cb` on the image, and then launch a `bash` shell in it.
-
-To do run, run the following command from a command-line interface on your Mac:
-
-    docker run -ti -v `pwd`/cb:/cb -e DISPLAY=host.docker.internal:0 debian /bin/bash
-
-5. Follow the instructions for Ubuntu 20.04, listed on the page with (installation instructions)[http://conceptbase.sourceforge.net/CB-Download.html]
-fix dependencies in the image and run CBinstaller. 
-
-Tell the installer to set the installation directory to be `/cb`.
-
-6. Disconnect. At this point, running `ls cb` should list the extracted ConceptBase files.
 
 ## Building the images
 
@@ -79,7 +57,7 @@ Supported environment variables
 
 Create the server container
 
-    docker create --name cbserver 
+    docker create --name cbserver \
     	--publish 4001:4001 \
 		--mount type=bind,src=`pwd`/cbdata,dst=/cb/cbdata \
 		cbserver:latest
@@ -95,13 +73,14 @@ NOTE: the server is set to shut down after the last client disconnects.
 
 ## Running the client
 
-The client will use XWindows remote display to show its GUI. To do so, must
-specify the DISPLAY environment and have local X server running with `xauth +
-127.0.0.1`
+NOTE: The client GUIs will run natively in your OS. You do NOT need to run them inside Docker. However, if you choose to do it anyway, follow these instructions.
+
+The client will use XWindows' remote display features to show its GUI. If you choose to run the client from within a container, you have an XWindows system running on your computer (e.g., XQuartz on a Mac, or XMing on a Windows PC). Make sure that your Xserver accepts incoming connections from localhost (`xauth + 127.0.0.1`).
+
 
 First we create the container
 
-    docker create --name cbclient 
+    docker create --name cbclient \
     	--env DISPLAY=host.docker.internal:0 \
 		--mount type=bind,src=`pwd`/cbexport,dst=/cb/cbexport \
 		--env CB_SERVER=host.docker.internal cbclient:latest
@@ -116,3 +95,5 @@ If nothing happens after issuing this command, make sure that XWindows is runnin
 
 I also built an all-in-one experiment that runs the client and the server in one go.	
     docker-compose up
+
+
