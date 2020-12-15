@@ -1,0 +1,10 @@
+FROM conceptbase
+ENV CB_PORT=4001
+ENV CB_DATA=/cb/cbdata
+ENV CB_MODE=persistent
+ENV CB_TRACE=low
+
+EXPOSE ${CB_PORT}/tcp
+VOLUME ["/cb/cbdata"]
+
+CMD /cb/cbserver -port ${CB_PORT} -d ${CB_DATA} -u ${CB_MODE} -t ${CB_TRACE} -sm slave

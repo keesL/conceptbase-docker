@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  cbserver:
+    build:
+      context: .
+      dockerfile: Dockerfile-server
+    environment:
+      - CB_PORT=4001
+      - CB_DATA=/cb/cbdata
+      - CB_MODE=persistent
+      - CB_TRACE=veryhigh
+    volumes:
+      - "./cbdata:/cb/cbdata"
+ 
+  cbclient:
+    build:
+      context: .
+      dockerfile: Dockerfile-client
+    depends_on:
+      - cbserver
+    environment:
+      - CB_SERVER=cbserver
+      - CB_PORT=4001

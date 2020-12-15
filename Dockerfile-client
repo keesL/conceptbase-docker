@@ -1,0 +1,15 @@
+FROM conceptbase
+ENV DISPLAY=host.docker.internal:0
+ENV CB_SERVER=host.docker.internal
+ENV CB_PORT=4001
+
+USER cb
+WORKDIR /cb
+
+VOLUME ["/cb/cbexport"]
+
+RUN sed -i "s/HOST/${CB_SERVER}/" .CBjavaInterface
+RUN sed -i "s/PORT/${CB_PORT}/" .CBjavaInterface
+
+CMD /cb/cbiva
+

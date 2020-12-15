@@ -1,0 +1,15 @@
+FROM debian
+
+RUN apt update
+RUN apt install -yy openjdk-11-jre libreadline5 libncursesw5 procps
+RUN ln -s /lib/x86_64-linux-gnu/libreadline.so.5 /lib/x86_64-linux-gnu/libreadline.so.6
+
+RUN useradd -md /cb cb
+USER cb
+
+COPY cb /cb/
+WORKDIR /cb
+RUN mkdir cbdata
+RUN mkdir cbexport
+
+VOLUME ["/cb/cbdata", "/cb/cbexport"]
