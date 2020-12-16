@@ -7,7 +7,7 @@ RUN ln -s /lib/x86_64-linux-gnu/libreadline.so.5 /lib/x86_64-linux-gnu/libreadli
 RUN useradd -md /cb cb
 USER cb
 
-COPY cb /cb/
+COPY cb/CBinstaller.jar /cb/
 WORKDIR /cb
 RUN unzip CBinstaller.jar
 RUN bash ./make-executable
