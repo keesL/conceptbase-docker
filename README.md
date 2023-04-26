@@ -95,5 +95,12 @@ If nothing happens after issuing this command, make sure that XWindows is runnin
 
 I also built an all-in-one experiment that runs the client and the server in one go.	
     docker-compose up
+    
+## Running Intel binaries on M1/M2 Mac
+
+The binaries for the ConceptBase server in CBinstaller.jar are compiles for Intel x86_64 architecture. 
+You may want to follow instructions at
+https://forums.docker.com/t/run-x86-intel-and-arm-based-images-on-apple-silicon-m1-macs/117123
+to get them running via Docker on a Mac M1/M2 computer.
 
 
