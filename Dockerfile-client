@@ -8,8 +8,8 @@ WORKDIR /cb
 
 VOLUME ["/cb/cbexport"]
 
-RUN sed -i "s/HOST/${CB_SERVER}/" .CBjavaInterface
-RUN sed -i "s/PORT/${CB_PORT}/" .CBjavaInterface
+#RUN sed -i "s/HOST/${CB_SERVER}/" .CBjavaInterface
+#RUN sed -i "s/PORT/${CB_PORT}/" .CBjavaInterface
 
-CMD /cb/cbiva
+#CMD /cb/cbiva
 

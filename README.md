@@ -87,7 +87,7 @@ First we create the container
 
 And then we can run it as often as we want
 
-    docker start cbclient
+    docker run -e CB_HOME=/cb -ti cbclient bin/CBjavaInterface
 
 If nothing happens after issuing this command, make sure that XWindows is running and that `xhost` access controls are set appropriately.
 
